@@ -3,8 +3,39 @@ var app=express();
 var port=3001;
 var dirty=require('dirty');
 var db = dirty('user.db');
+/**
+* dbToArray
+*
+* place all records to array
+*
+* arr - array to hold objects
+* db - database
+*
+**/
+var dbToArray = function(arr,db){
+    var obj=null;
+    db.forEach(function(key,val){
+        obj=new Object();
+        obj["key"]=key;
+        obj["val"]=val;
+        arr.push(obj);
+    });
+}
+/**
+* arrClear
+*
+* clear array
+*
+* arr - array to clear
+**/
+var arrClear = function(arr){
+    var i=0;
+    for(;i<arr.length;i++){
+        arr[i]=null;
+    }
+}
 
-db.on('load',function{
+db.on('load',function(){
     db.set('john',{likes:5});
     db.set('jane',{likes:7});
     db.set('abe',{likes:11});
@@ -19,7 +50,11 @@ db.on('load',function{
 });
 
 app.get('/users', function(req,res){
-    res.send('hello');
+    var arr=new Array();
+    dbToArray(arr,db);
+    res.send(JSON.stringify(arr));
+    arrClear(arr);
+    arr=null;
 });
 app.listen(port,function(){
     console.log('example app listening on port ${port}.');
