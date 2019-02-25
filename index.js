@@ -16,21 +16,31 @@ var users = [
 ["bob","pass",29],
 ["xavier","pass",31]
 ];
+var stmts = [
+"SELECT uname,likes FROM users",
+];
+var objs = [
+    ["uname","likes"]
+];
 /**
 * dbToArray
 *
 * place all records to array
 *
 * arr - array to hold objects
-* db - database
+* db - database to use
+* keys - keys for object
+* stmt - statement to run
 *
 **/
-var dbToArray = function(arr,db){
+var dbToArray = function(arr,db,keys,stmt){
     var obj=null;
-    db.forEach(function(key,val){
+    var i = 0;
+    db.each(stmt,function(err,ro){
         obj=new Object();
-        obj["key"]=key;
-        obj["val"]=val;
+        for(i=0;i<keys.length;i++){
+            obj[keys[i]]=ro[keys[i]];
+        }
         arr.push(obj);
     });
 }
@@ -79,7 +89,11 @@ app.use(function (req, res, next) {
 });
 
 app.get('/users', function(req,res){
-    res.send("users");
+    var arr = new Array();
+    dbToArray(arr,db,objs[0],stmts[0]);
+    res.send(JSON.stringify(arr));
+    arrClear(arr);
+    arr = null;
 });
 
 app.listen(port,function(){
