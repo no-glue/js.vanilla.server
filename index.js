@@ -134,3 +134,4 @@ app.listen(port,function(){
 // TODO DONE empty db on exit
 // TODO DONE modular seed users
 // TODO DONE modular create users
+// TODO auth token
