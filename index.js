@@ -75,6 +75,9 @@ app.get('/users', function(req,res){
     arrClear(arr);
     arr=null;
 });
+
 app.listen(port,function(){
     console.log('example app listening on port ${port}.');
 });
+
+// TODO empty db on exit
