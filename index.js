@@ -18,10 +18,12 @@ var users = [
 ];
 var stmts = [
 "SELECT uname,likes FROM users",
-"INSERT INTO users VALUES (?,?,?)"
+"INSERT INTO users VALUES (?,?,?)",
+"CREATE TABLE users (uname TEXT, pass TEXT, likes INTEGER)"
 ];
 var objs = [
     ["uname","likes"],
+    [],
     []
 ];
 /**
@@ -72,10 +74,20 @@ var userSeed = function(db,stmt,arr){
     }
     stmt.finalize();
 }
+/**
+* userCreate
+*
+* db - database to use
+* stmt - statement to use
+*
+**/
+var userCreate = function(db,stmt){
+    db.run(stmt);
+}
 
 db.serialize(function(){
     console.log("table seed");
-    db.run("CREATE TABLE users (uname TEXT, pass TEXT, likes INTEGER)");
+    userCreate(db,stmts[2]);
     userSeed(db,stmts[1],users);
     // TODO modular seed users
 });
