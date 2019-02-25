@@ -89,7 +89,6 @@ db.serialize(function(){
     console.log("table seed");
     userCreate(db,stmts[2]);
     userSeed(db,stmts[1],users);
-    // TODO modular seed users
 });
 
 app.use(function (req, res, next) {
@@ -132,4 +131,6 @@ app.listen(port,function(){
     console.log('example app listening on port ${port}.');
 });
 
-// TODO empty db on exit
+// TODO DONE empty db on exit
+// TODO DONE modular seed users
+// TODO DONE modular create users
