@@ -18,9 +18,11 @@ var users = [
 ];
 var stmts = [
 "SELECT uname,likes FROM users",
+"INSERT INTO users VALUES (?,?,?)"
 ];
 var objs = [
-    ["uname","likes"]
+    ["uname","likes"],
+    []
 ];
 /**
 * arrClear
@@ -51,17 +53,30 @@ var objPopulate = function(obj,keys,ro){
         obj[keys[i]]=ro[keys[i]];
     }
 }
+/**
+* userSeed
+*
+* seed users
+*
+* db - database to use
+* stmt - statement to use
+* arr - array to use
+*
+**/
+var userSeed = function(db,stmt,arr){
+    var stmt = db.prepare(stmt);
+    var i = 0;
+    for(;i<arr.length;i++){
+        stmt.run(arr[i]);
+        console.log(arr[i]);
+    }
+    stmt.finalize();
+}
 
 db.serialize(function(){
     console.log("table seed");
     db.run("CREATE TABLE users (uname TEXT, pass TEXT, likes INTEGER)");
-    var stmt = db.prepare("INSERT INTO users VALUES (?,?,?)");
-    var i = 0;
-    for(;i<users.length;i++){
-        stmt.run(users[i]);
-        console.log(users[i]);
-    }
-    stmt.finalize();
+    userSeed(db,stmts[1],users);
     // TODO modular seed users
 });
 
