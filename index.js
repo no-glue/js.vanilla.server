@@ -99,7 +99,22 @@ app.use(function (req, res, next) {
 });
 
 app.get('/users', function(req,res){
-    dbToArray(res,db,objs[0],stmts[0]);
+    var obj=null;
+    var i = 0;
+    var arr = new Array();
+    db.each(stmts[0],function(err,ro){
+        console.log("ro",ro);
+        obj=new Object();
+        for(i=0;i<objs[0].length;i++){
+            obj[objs[0][i]]=ro[objs[0][i]];
+        }
+        console.log("ro obj",obj);
+        arr.push(obj);
+    },function(err,count){
+        res.send(JSON.stringify(arr));
+        arrClear(arr);
+        arr=null;
+    });
 });
 
 app.listen(port,function(){
