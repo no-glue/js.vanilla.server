@@ -23,28 +23,6 @@ var objs = [
     ["uname","likes"]
 ];
 /**
-* dbToArray
-*
-* place all records to array
-*
-* arr - array to hold objects
-* db - database to use
-* keys - keys for object
-* stmt - statement to run
-*
-**/
-var dbToArray = function(arr,db,keys,stmt){
-    var obj=null;
-    var i = 0;
-    db.each(stmt,function(err,ro){
-        obj=new Object();
-        for(i=0;i<keys.length;i++){
-            obj[keys[i]]=ro[keys[i]];
-        }
-        arr.push(obj);
-    });
-}
-/**
 * arrClear
 *
 * clear array
@@ -57,13 +35,45 @@ var arrClear = function(arr){
         arr[i]=null;
     }
 }
+/**
+* dbToArray
+*
+* place all records to array
+*
+* res - response
+* db - database to use
+* keys - keys for object
+* stmt - statement to run
+*
+**/
+var dbToArray = function(res,db,keys,stmt){
+    var obj=null;
+    var i = 0;
+    var arr = new Array();
+    db.each(stmt,function(err,ro){
+        console.log("ro",ro);
+        obj=new Object();
+        for(i=0;i<keys.length;i++){
+            obj[keys[i]]=ro[keys[i]];
+        }
+        console.log("ro obj",obj);
+        arr.push(obj);
+    },function(err,count){
+        res.send(JSON.stringify(arr));
+        arrClear(arr);
+        arr=null;
+    });
+    console.log("arr",arr);
+}
 
 db.serialize(function(){
+    console.log("table seed");
     db.run("CREATE TABLE users (uname TEXT, pass TEXT, likes INTEGER)");
     var stmt = db.prepare("INSERT INTO users VALUES (?,?,?)");
     var i = 0;
     for(;i<users.length;i++){
         stmt.run(users[i]);
+        console.log(users[i]);
     }
     stmt.finalize();
     // TODO modular seed users
@@ -89,11 +99,7 @@ app.use(function (req, res, next) {
 });
 
 app.get('/users', function(req,res){
-    var arr = new Array();
-    dbToArray(arr,db,objs[0],stmts[0]);
-    res.send(JSON.stringify(arr));
-    arrClear(arr);
-    arr = null;
+    dbToArray(res,db,objs[0],stmts[0]);
 });
 
 app.listen(port,function(){
