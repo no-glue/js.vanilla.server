@@ -19,7 +19,7 @@ var users = [
 var stmts = [
 "SELECT uname,likes FROM users",
 "INSERT INTO users VALUES (?,?,?)",
-"CREATE TABLE users (uname TEXT, pass TEXT, likes INTEGER)"
+"CREATE TABLE users (uname TEXT PRIMARY KEY, pass TEXT, likes INTEGER)"
 ];
 var objs = [
     ["uname","likes"],
