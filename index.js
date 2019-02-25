@@ -1,8 +1,21 @@
 var express=require('express');
 var app=express();
 var port=3001;
-var dirty=require('dirty');
-var db = dirty('user.db');
+var sqlite=require('sqlite3').verbose();
+var db = new sqlite.Database(':memory:');
+var users = [
+["john","pass",1],
+["jane","pass",2],
+["abe","pass",3],
+["martha","pass",5],
+["lisa","pass",7],
+["anthony","pass",11],
+["mark","pass",17],
+["beth","pass",19],
+["jill","pass",23],
+["bob","pass",29],
+["xavier","pass",31]
+];
 /**
 * dbToArray
 *
@@ -35,18 +48,15 @@ var arrClear = function(arr){
     }
 }
 
-db.on('load',function(){
-    db.set('john',{likes:5});
-    db.set('jane',{likes:7});
-    db.set('abe',{likes:11});
-    db.set('martha',{likes:17});
-    db.set('lisa',{likes:23});
-    db.set('anthony',{likes:1});
-    db.set('mark',{likes:2});
-    db.set('beth',{likes:3});
-    db.set('jill',{likes:29});
-    db.set('bob',{likes:31});
-    db.set('xavier',{likes:37});
+db.serialize(function(){
+    db.run("CREATE TABLE users (uname TEXT, pass TEXT, likes INTEGER)");
+    var stmt = db.prepare("INSERT INTO users VALUES (?,?,?)");
+    var i = 0;
+    for(;i<users.length;i++){
+        stmt.run(users[i]);
+    }
+    stmt.finalize();
+    // TODO modular seed users
 });
 
 app.use(function (req, res, next) {
@@ -69,11 +79,7 @@ app.use(function (req, res, next) {
 });
 
 app.get('/users', function(req,res){
-    var arr=new Array();
-    dbToArray(arr,db);
-    res.send(JSON.stringify(arr));
-    arrClear(arr);
-    arr=null;
+    res.send("users");
 });
 
 app.listen(port,function(){
