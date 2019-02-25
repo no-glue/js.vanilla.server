@@ -36,34 +36,20 @@ var arrClear = function(arr){
     }
 }
 /**
-* dbToArray
+* objPopulate
 *
-* place all records to array
+* populate an object
 *
-* res - response
-* db - database to use
-* keys - keys for object
-* stmt - statement to run
+* obj - object to populate
+* keys - keys to use
+* ro - records to use
 *
 **/
-var dbToArray = function(res,db,keys,stmt){
-    var obj=null;
+var objPopulate = function(obj,keys,ro){
     var i = 0;
-    var arr = new Array();
-    db.each(stmt,function(err,ro){
-        console.log("ro",ro);
-        obj=new Object();
-        for(i=0;i<keys.length;i++){
-            obj[keys[i]]=ro[keys[i]];
-        }
-        console.log("ro obj",obj);
-        arr.push(obj);
-    },function(err,count){
-        res.send(JSON.stringify(arr));
-        arrClear(arr);
-        arr=null;
-    });
-    console.log("arr",arr);
+    for(;i<keys.length;i++){
+        obj[keys[i]]=ro[keys[i]];
+    }
 }
 
 db.serialize(function(){
@@ -105,9 +91,7 @@ app.get('/users', function(req,res){
     db.each(stmts[0],function(err,ro){
         console.log("ro",ro);
         obj=new Object();
-        for(i=0;i<objs[0].length;i++){
-            obj[objs[0][i]]=ro[objs[0][i]];
-        }
+        objPopulate(obj,objs[0],ro);
         console.log("ro obj",obj);
         arr.push(obj);
     },function(err,count){
