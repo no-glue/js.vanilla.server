@@ -127,7 +127,7 @@ app.get('/users', function(req,res){
     });
 });
 app.get('/signup',function(req,res){
-    res.send('signup');
+    res.send('signup'+req.query.uname+req.query.pass);
 });
 
 app.listen(port,function(){
