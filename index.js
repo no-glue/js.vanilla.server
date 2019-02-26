@@ -3,6 +3,7 @@ var app=express();
 var port=3001;
 var sqlite=require('sqlite3').verbose();
 var db = new sqlite.Database(':memory:');
+var md5=require('md5');
 var users = [
 ["john","pass",1],
 ["jane","pass",2],
@@ -131,8 +132,11 @@ app.get('/users', function(req,res){
     });
 });
 app.get('/signup',function(req,res){
-    var uname = req.query.uname;
-    var pass = req.query.pass;
+    var uname = '';
+    var pass = '';
+    uname=req.query.uname;
+    pass=req.query.pass;
+    pass=md5(pass);
     db.get(stmts[3],[uname],function(err,ro){
         if(err){
         } else {
