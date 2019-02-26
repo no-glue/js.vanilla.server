@@ -21,10 +21,12 @@ var stmts = [
 "SELECT uname,likes FROM users",
 "INSERT INTO users VALUES (?,?,?)",
 "CREATE TABLE users (uname TEXT PRIMARY KEY, pass TEXT, likes INTEGER)",
-"SELECT uname FROM users WHERE uname=?"
+"SELECT uname FROM users WHERE uname=?",
+"INSERT INTO users VALUES (?,?)"
 ];
 var objs = [
     ["uname","likes"],
+    [],
     [],
     [],
     []
@@ -138,7 +140,7 @@ app.get('/signup',function(req,res){
     pass=req.query.pass;
     pass=md5(pass);
     db.get(stmts[3],[uname],function(err,ro){
-        if(err){
+        if(ro){
         } else {
             res.send('signup'+uname+pass);
         }
