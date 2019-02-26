@@ -19,10 +19,12 @@ var users = [
 var stmts = [
 "SELECT uname,likes FROM users",
 "INSERT INTO users VALUES (?,?,?)",
-"CREATE TABLE users (uname TEXT PRIMARY KEY, pass TEXT, likes INTEGER)"
+"CREATE TABLE users (uname TEXT PRIMARY KEY, pass TEXT, likes INTEGER)",
+"SELECT uname FROM users WHERE uname=?"
 ];
 var objs = [
     ["uname","likes"],
+    [],
     [],
     []
 ];
@@ -77,6 +79,10 @@ var userSeed = function(db,stmt,arr){
 /**
 * userCreate
 *
+* create users table
+*
+* can be used to create other tables too
+*
 * db - database to use
 * stmt - statement to use
 *
@@ -127,7 +133,14 @@ app.get('/users', function(req,res){
     });
 });
 app.get('/signup',function(req,res){
-    res.send('signup'+req.query.uname+req.query.pass);
+    var uname = req.query.uname;
+    var pass = req.query.pass;
+    db.get(stmts[3],[uname],function(err,ro){
+        if(err){
+        } else {
+            res.send('signup'+uname+pass);
+        }
+    });
 });
 
 app.listen(port,function(){
