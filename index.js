@@ -58,16 +58,16 @@ var objPopulate = function(obj,keys,ro){
     }
 }
 /**
-* userSeed
+* tableSeed
 *
-* seed users
+* seed a table
 *
 * db - database to use
 * stmt - statement to use
 * arr - array to use
 *
 **/
-var userSeed = function(db,stmt,arr){
+var tableSeed = function(db,stmt,arr){
     var stmt = db.prepare(stmt);
     var i = 0;
     for(;i<arr.length;i++){
@@ -77,24 +77,22 @@ var userSeed = function(db,stmt,arr){
     stmt.finalize();
 }
 /**
-* userCreate
+* tableCreate
 *
-* create users table
-*
-* can be used to create other tables too
+* create table
 *
 * db - database to use
 * stmt - statement to use
 *
 **/
-var userCreate = function(db,stmt){
+var tableCreate = function(db,stmt){
     db.run(stmt);
 }
 
 db.serialize(function(){
     console.log("table seed");
-    userCreate(db,stmts[2]);
-    userSeed(db,stmts[1],users);
+    tableCreate(db,stmts[2]);
+    tableSeed(db,stmts[1],users);
 });
 
 app.use(function (req, res, next) {
