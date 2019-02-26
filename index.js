@@ -126,6 +126,9 @@ app.get('/users', function(req,res){
         arr=null;
     });
 });
+app.get('/signup',function(req,res){
+    res.send('signup');
+});
 
 app.listen(port,function(){
     console.log('example app listening on port ${port}.');
