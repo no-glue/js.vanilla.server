@@ -29,7 +29,7 @@ var stmts = [
 "INSERT INTO users VALUES (?,?,?)",
 "CREATE TABLE users (uname TEXT PRIMARY KEY, pass TEXT, likes INTEGER)",
 "SELECT uname FROM users WHERE uname=?",
-"INSERT INTO users(uname,pass) VALUES (?,?)"
+"INSERT INTO users(uname,pass,likes) VALUES (?,?,?)"
 ];
 var objs = [
     ["uname","likes"],
@@ -152,7 +152,7 @@ app.get('/signup',function(req,res){
                 JSON.stringify({"message":errorSignupMessage})
             );
         } else {
-            tableSeed(db,stmts[4],[[uname,pass]]);
+            tableSeed(db,stmts[4],[[uname,pass,0]]);
             res.send(
                 JSON.stringify({"message":successSignupMessage})
             );
