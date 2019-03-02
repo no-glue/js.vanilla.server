@@ -24,7 +24,7 @@ var stmts = [
 "INSERT INTO users VALUES (?,?,?)",
 "CREATE TABLE users (uname TEXT PRIMARY KEY, pass TEXT, likes INTEGER)",
 "SELECT uname FROM users WHERE uname=?",
-"INSERT INTO users VALUES (?,?)"
+"INSERT INTO users(uname,pass) VALUES (?,?)"
 ];
 var objs = [
     ["uname","likes"],
