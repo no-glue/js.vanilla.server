@@ -150,7 +150,7 @@ app.get('/signup',function(req,res){
         } else {
             tableSeed(db,stmts[4],[[uname,pass]]);
             res.send(
-                JSON.stringify({"message":successSignupMessage});
+                JSON.stringify({"message":successSignupMessage})
             );
         }
     });
