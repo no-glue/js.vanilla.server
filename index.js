@@ -147,6 +147,7 @@ app.get('/signup',function(req,res){
                 JSON.stringify({"message":errorSignupMessage})
             );
         } else {
+            tableSeed(db,stmts[4],[[uname,pass]]);
             res.send('signup'+uname+pass);
         }
     });
