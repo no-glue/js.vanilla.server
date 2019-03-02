@@ -7,6 +7,10 @@ var md5=require('md5');
 var errorStatus=500;
 var errorSignupMessage='User already exists';
 var successSignupMessage='Signup';
+var errorLoginMessage='User does not exists';
+var errorLoginMessageB='User already logged in';
+var successLoginMessage='Login';
+var loggedIn={};
 var users = [
 ["john","pass",1],
 ["jane","pass",2],
@@ -151,6 +155,32 @@ app.get('/signup',function(req,res){
             tableSeed(db,stmts[4],[[uname,pass]]);
             res.send(
                 JSON.stringify({"message":successSignupMessage})
+            );
+        }
+    });
+});
+app.get('/login',function(req,res){
+    var uname='';
+    var pass='';
+    uname=req.query.uname;
+    pass=req.query.pass;
+    pass=md5(pass);
+    if(loggedIn[uname]){
+        res.status(errorStatus).
+            send(JSON.stringify({"message":errorLoginMessageB}));
+    }
+    db.get(stmts[3],[uname],function(err,ro){
+        if(ro){
+            loggedIn[uname]=md5(Date.now()+uname);
+            res.send(
+                JSON.stringify({
+                    "message":successLoginMessage;
+                    "token":loggedIn[uname];
+                    })
+            );
+        } else {
+            res.status(errorStatus).send(
+                JSON.stringify({"message":errorLoginMessage})
             );
         }
     });
