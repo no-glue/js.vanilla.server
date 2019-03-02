@@ -148,7 +148,9 @@ app.get('/signup',function(req,res){
             );
         } else {
             tableSeed(db,stmts[4],[[uname,pass]]);
-            res.send('signup'+uname+pass);
+            res.send(
+                JSON.stringify({"message":'signup'+uname+pass});
+            );
         }
     });
 });
