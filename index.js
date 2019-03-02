@@ -6,6 +6,7 @@ var db = new sqlite.Database(':memory:');
 var md5=require('md5');
 var errorStatus=500;
 var errorSignupMessage='User already exists';
+var successSignupMessage='Signup';
 var users = [
 ["john","pass",1],
 ["jane","pass",2],
@@ -149,7 +150,7 @@ app.get('/signup',function(req,res){
         } else {
             tableSeed(db,stmts[4],[[uname,pass]]);
             res.send(
-                JSON.stringify({"message":'signup'+uname+pass});
+                JSON.stringify({"message":successSignupMessage});
             );
         }
     });
