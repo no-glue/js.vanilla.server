@@ -174,8 +174,8 @@ app.get('/login',function(req,res){
             loggedIn[uname]=md5(Date.now()+uname);
             res.send(
                 JSON.stringify({
-                    "message":successLoginMessage;
-                    "token":loggedIn[uname];
+                    "message":successLoginMessage,
+                    "token":loggedIn[uname]
                     })
             );
         } else {
