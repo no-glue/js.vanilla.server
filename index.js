@@ -4,6 +4,8 @@ var port=3001;
 var sqlite=require('sqlite3').verbose();
 var db = new sqlite.Database(':memory:');
 var md5=require('md5');
+var errorStatus=500;
+var errorSignupMessage='User already exists';
 var users = [
 ["john","pass",1],
 ["jane","pass",2],
@@ -141,6 +143,9 @@ app.get('/signup',function(req,res){
     pass=md5(pass);
     db.get(stmts[3],[uname],function(err,ro){
         if(ro){
+            res.status(errorStatus).send(
+                JSON.stringify({"message":errorSignupMessage});
+            );
         } else {
             res.send('signup'+uname+pass);
         }
