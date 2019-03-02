@@ -144,7 +144,7 @@ app.get('/signup',function(req,res){
     db.get(stmts[3],[uname],function(err,ro){
         if(ro){
             res.status(errorStatus).send(
-                JSON.stringify({"message":errorSignupMessage});
+                JSON.stringify({"message":errorSignupMessage})
             );
         } else {
             res.send('signup'+uname+pass);
