@@ -10,6 +10,8 @@ var successSignupMessage='Signup';
 var errorLoginMessage='User does not exists';
 var errorLoginMessageB='User already logged in';
 var successLoginMessage='Login';
+var errorMeMesage='User is not logged in';
+var errorMeMessageB='User token does not match';
 var loggedIn={};
 var users = [
 ["john","pass",1],
@@ -183,6 +185,27 @@ app.get('/login',function(req,res){
                 JSON.stringify({"message":errorLoginMessage})
             );
         }
+    });
+});
+app.get('/me',function(req,res){
+    var uname=req.query.uname;
+    var token=req.query.token;
+    if(!loggedIn[uname]){
+        res.status(errorStatus).send(JSON.stringify({
+            "message":errorMeMessage
+        }));
+    }
+    if(loggedIn[uname]!=token){
+        res.status(errorStatus).send(
+            JSON.stringify({"message":errorMeMessageB})
+        );
+    }
+    db.get(stmts[3],[uname],function(err,ro){
+        res.send(
+            JSON.stringify({
+                "likes":ro.likes
+            })
+        );
     });
 });
 
