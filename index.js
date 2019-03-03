@@ -12,6 +12,8 @@ var errorLoginMessageB='User already logged in';
 var successLoginMessage='Login';
 var errorMeMessage='User is not logged in';
 var errorMeMessageB='User token does not match';
+var errorPassMessage='User is not logged in';
+var errorPassMessageB='User token does not match';
 var loggedIn={};
 var users = [
 ["john","pass",1],
@@ -32,10 +34,12 @@ var stmts = [
 "CREATE TABLE users (uname TEXT PRIMARY KEY, pass TEXT, likes INTEGER)",
 "SELECT uname FROM users WHERE uname=?",
 "INSERT INTO users(uname,pass,likes) VALUES (?,?,?)",
-"SELECT likes FROM users WHERE uname=?"
+"SELECT likes FROM users WHERE uname=?",
+"UPDATE users SET pass=? WHERE uname=?"
 ];
 var objs = [
     ["uname","likes"],
+    [],
     [],
     [],
     [],
@@ -211,6 +215,24 @@ app.get('/me',function(req,res){
         );
     });
 });
+app.get('/pass',function(req,res){
+    var oldpass=req.query.oldpass;
+    var pass=req.query.pass;
+    var uname=req.query.uname;
+    var token=req.query.token;
+    if(!loggedIn[uname]){
+        res.status(errorStatus).send(JSON.stringify({
+            "message":errorPassMessage
+        }));
+    }
+    if(loggedIn[uname]!=token){
+        res.status(errorStatus).send(
+            JSON.stringify({"message":errorPassMessageB})
+        );
+    }
+    db.run(stmts[6],[pass,uname],function(err){
+    });
+});
 
 app.listen(port,function(){
     console.log('example app listening on port ${port}.');
@@ -220,3 +242,4 @@ app.listen(port,function(){
 // TODO DONE modular seed users
 // TODO DONE modular create users
 // TODO auth token
+// TODO not sure tableCreate function is required
