@@ -202,7 +202,7 @@ app.get('/me',function(req,res){
             JSON.stringify({"message":errorMeMessageB})
         );
     }
-    db.get(stmts[6],[uname],function(err,ro){
+    db.get(stmts[5],[uname],function(err,ro){
         console.log('me',ro);
         res.send(
             JSON.stringify({
