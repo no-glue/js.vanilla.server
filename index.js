@@ -201,6 +201,7 @@ app.get('/me',function(req,res){
         );
     }
     db.get(stmts[3],[uname],function(err,ro){
+        console.log('me',ro);
         res.send(
             JSON.stringify({
                 "likes":ro.likes
