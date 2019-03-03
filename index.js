@@ -31,10 +31,12 @@ var stmts = [
 "INSERT INTO users VALUES (?,?,?)",
 "CREATE TABLE users (uname TEXT PRIMARY KEY, pass TEXT, likes INTEGER)",
 "SELECT uname FROM users WHERE uname=?",
-"INSERT INTO users(uname,pass,likes) VALUES (?,?,?)"
+"INSERT INTO users(uname,pass,likes) VALUES (?,?,?)",
+"SELECT likes FROM users WHERE uname=?"
 ];
 var objs = [
     ["uname","likes"],
+    [],
     [],
     [],
     [],
@@ -200,7 +202,7 @@ app.get('/me',function(req,res){
             JSON.stringify({"message":errorMeMessageB})
         );
     }
-    db.get(stmts[3],[uname],function(err,ro){
+    db.get(stmts[6],[uname],function(err,ro){
         console.log('me',ro);
         res.send(
             JSON.stringify({
