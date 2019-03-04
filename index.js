@@ -13,7 +13,7 @@ var successLoginMessage='Login';
 var errorMeMessage='User is not logged in';
 var errorMeMessageB='User token does not match';
 var errorPassMessage='User is not logged in';
-var errorPassMessageB='User token does not match';
+var errorPassMessageC='Could not update passphrase';
 var loggedIn={};
 var users = [
 ["john","pass",1],
@@ -231,6 +231,18 @@ app.get('/pass',function(req,res){
         );
     }
     db.run(stmts[6],[pass,uname],function(err){
+        if(err){
+            res.status(errorStatus).send(
+                JSON.stringify({
+                    "message":errorPassMessageC
+                });
+            );
+        } else {
+            res.send({
+                "uname":uname,
+                "token":token
+            });
+        }
     });
 });
 
@@ -241,5 +253,5 @@ app.listen(port,function(){
 // TODO DONE empty db on exit
 // TODO DONE modular seed users
 // TODO DONE modular create users
-// TODO auth token
+// TODO DONE auth token
 // TODO not sure tableCreate function is required
