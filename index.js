@@ -235,7 +235,7 @@ app.get('/pass',function(req,res){
             res.status(errorStatus).send(
                 JSON.stringify({
                     "message":errorPassMessageC
-                });
+                })
             );
         } else {
             res.send({
