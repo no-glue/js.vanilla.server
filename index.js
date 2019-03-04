@@ -13,7 +13,9 @@ var successLoginMessage='Login';
 var errorMeMessage='User is not logged in';
 var errorMeMessageB='User token does not match';
 var errorPassMessage='User is not logged in';
+var errorPassMessageB='User token does not match';
 var errorPassMessageC='Could not update passphrase';
+var errorPassMessageD='Passphrase does not match';
 var loggedIn={};
 var users = [
 ["john","pass",1],
@@ -216,8 +218,8 @@ app.get('/me',function(req,res){
     });
 });
 app.get('/pass',function(req,res){
-    var oldpass=req.query.oldpass;
-    var pass=req.query.pass;
+    var pass=md5(req.query.pass);
+    var rpass=md5(req.query.rpass);
     var uname=req.query.uname;
     var token=req.query.token;
     if(!loggedIn[uname]){
@@ -228,6 +230,15 @@ app.get('/pass',function(req,res){
     if(loggedIn[uname]!=token){
         res.status(errorStatus).send(
             JSON.stringify({"message":errorPassMessageB})
+        );
+    }
+    if(pass!=rpass){
+        res.status(errorStatus).send(
+            JSON.stringify(
+                {
+                    "message":errorPassMessageD
+                }
+            )
         );
     }
     db.run(stmts[6],[pass,uname],function(err){
